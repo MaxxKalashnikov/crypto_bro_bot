@@ -102,6 +102,15 @@ coinRouter.get('/getmarketcap', async (req, res) =>{
         method: 'GET',
         headers: {accept: 'application/json', 'x-cg-demo-api-key': api}
     };
+
+    try {
+        const response = await fetch(url, options)
+        const data = await response.json()
+        res.status(200).json(data)
+    } catch (error) {
+        console.error("Error connecting to API:", error);
+        response.status(500).json({ error: error.message });
+    }
 })
 
 module.exports = {coinRouter};
