@@ -1,4 +1,4 @@
 front_bot/node_modules
-back/node_modules
+back_bot/node_modules
 front_bot/.env
-back/.env
+back_bot/.env
