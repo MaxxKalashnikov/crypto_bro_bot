@@ -4,33 +4,6 @@ require('dotenv').config()
 const api = process.env.COINGECKO_API_KEY;
 const coinRouter = express.Router();
 
-coinRouter.get('/', async (request, response) => {
-    try{
-        response.status(200).json("hi")
-    }catch(error){
-        response.statusMessage = error;
-        response.status(500).json({error: error})
-    }
-});
-
-coinRouter.get('/get', async (request, response) => {
-    const url = `https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd`;
-    const options = { 
-        method: 'GET',
-        headers: {accept: 'application/json', 'x-cg-demo-api-key': api}
-    };
-
-    try {
-        const res = await fetch(url, options);
-        const data = await res.json();
-        console.log(data)
-        response.status(200).json(data);
-    } catch (error) {
-        console.error("Error connecting to API:", error);
-        response.status(500).json({ error: error.message });
-    }
-});
-
 coinRouter.get('/getlist', async (request, response) => {
     const url = `https://api.coingecko.com/api/v3/coins/list`;
     const options = { method: 'GET', headers: { accept: 'application/json' } };

@@ -2,8 +2,7 @@ require('dotenv').config();
 const { Bot, session, InlineKeyboard , HttpError, GrammyError } = require('grammy');
 const { conversations, createConversation } = require('@grammyjs/conversations');
 
-const BACKEND_ROOT_URL = "http://localhost:3000";
-let coinPrice = 0;
+const BACKEND_ROOT_URL = process.env.BACKEND_ROOT_URL;
 
 // Create the bot
 const bot = new Bot(process.env.BOT_API_KEY);
@@ -13,7 +12,7 @@ bot.use(session({ initial: () => ({}) }));
 bot.use(conversations());
 
 bot.api.setMyCommands([
-    { command: 'start', description: 'Starts the bot' },
+    { command: 'start', description: 'Starting message' },
     { command: 'hello', description: 'Says hello' },
     { command: 'help', description: 'What I can do for you' },
     { command: 'search_coin', description: 'Find a coin' },
@@ -102,9 +101,17 @@ bot.use(createConversation(searchCoinConversation));
 
 // Command handlers
 bot.command('start', async (ctx) => {
-    coinPrice = 0;
-    await getTasks();
-    await ctx.reply(coinPrice.toString());
+    await ctx.reply(`
+<b><i>Hello and welcome to Crypto bro!</i></b>
+
+Here you can find infromation about crypto coins and check some other statistics and data. You can find more info here /help
+
+<b>Have fun!</b>
+
+Admin and developer: <a href='https://t.me/mmaks_kalashnikov'> Maks</a>
+CoinGecko API docs: <a href='https://docs.coingecko.com/v3.0.1/reference/introduction'> CoinGecko API</a>
+        `, 
+        {parse_mode: 'HTML'});
 });
 
 bot.command('search_coin', async (ctx) => {
@@ -122,7 +129,13 @@ bot.command('help', async (ctx) => {
 
 I can find some information about crypto currencies and more. Here is the list and short description of available commands:
 
+/start - starting message
+/hello - in case you want me to say hi to you
+/help - sends this message 
+/search_coin - promps you to enter id or name of any crypto coin you are interested in. Based on your input you can see a list of coins from where you can choose the one which you like and get main information about it (current price, market cap, description, etc.)
+/market_cap - sends you a list of TOP 10 coins at the monent
 
+Need more help? Contact me here: <b><a href='https://t.me/mmaks_kalashnikov'>Maks</a></b>
         `,
         { parse_mode: "HTML" }
     );
